@@ -1,0 +1,9 @@
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# environment
+venv/
+.idea/
+
+# cache
+__pycache__/
