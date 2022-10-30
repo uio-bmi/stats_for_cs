@@ -1,3 +1,6 @@
+import operator
+from collections import OrderedDict
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -29,7 +32,10 @@ def plot_outcomes(outcomes, normalize: bool = False):
 
 def plot_event_probabilities(event_probabilities: dict):
     fig, ax = plt.subplots(clear=True)
-    x_values = list(event_probabilities.keys())
-    y_values = list(event_probabilities.values())
+
+    sorted_probas = OrderedDict(sorted(event_probabilities.items(), key=operator.itemgetter(1), reverse=True))
+
+    x_values = list(sorted_probas.keys())
+    y_values = list(sorted_probas.values())
     ax.bar(x_values, y_values)
     ax.set_xticks(x_values)
