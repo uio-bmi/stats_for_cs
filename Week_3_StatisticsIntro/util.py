@@ -7,7 +7,7 @@ def get_iris_dataset():
     return px.data.iris()
 
 
-def plot_many_spins(values):
+def plot_many_values_with_mean(values, plot_title: str = ""):
     import plotly.graph_objects as go
 
     mean = np.mean(values)
@@ -21,5 +21,5 @@ def plot_many_spins(values):
     fig.add_annotation(x=mean, y=y1_mean, text=f"mean={mean}", showarrow=False, yshift=10)
 
     fig.update_layout(yaxis_title='counts', xaxis={'title': 'result'}, template='plotly_white',
-                      showlegend=False)
+                      showlegend=False, title=plot_title)
     fig.show()
