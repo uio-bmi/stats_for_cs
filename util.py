@@ -31,11 +31,23 @@ def plot_outcomes(outcomes, normalize: bool = False):
 
 
 def plot_event_probabilities(event_probabilities: dict):
-    fig, ax = plt.subplots(clear=True)
+    import plotly.express as px
 
-    sorted_probas = OrderedDict(sorted(event_probabilities.items(), key=operator.itemgetter(1), reverse=True))
+    fig = px.bar(x=list(event_probabilities.keys()), y=list(event_probabilities.values()))
+    fig.update_layout(yaxis_title='estimated<br>probability', xaxis={'title': 'event'}, template='plotly_white',
+                      showlegend=False)
+    fig.show()
 
-    x_values = list(sorted_probas.keys())
-    y_values = list(sorted_probas.values())
-    ax.bar(x_values, y_values)
-    ax.set_xticks(x_values)
+
+def plot_probability_comparison(event_probabilities_simulation, event_probabilities_formula):
+    import plotly.graph_objects as go
+
+    fig = go.Figure(data=[
+        go.Bar(name='formula', x=list(event_probabilities_formula.keys()),
+               y=list(event_probabilities_formula.values())),
+        go.Bar(name='simulation', x=list(event_probabilities_simulation.keys()),
+               y=list(event_probabilities_simulation.values()))])
+    fig.update_layout(barmode='group', yaxis_title='(estimated)<br>probability', xaxis={'title': 'event'},
+                      template='plotly_white', showlegend=True)
+
+    fig.show()
