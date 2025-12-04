@@ -7,3 +7,19 @@ so as to effectively learn fundamental probability and statistics concepts throu
 
 To follow these sessions, no prior knowledge of probability theory or statistics is required.
 
+Installation notes:
+--------------------
+
+To run notebooks locally, install ipykernel and jupyter:
+
+```
+pip install ipykernel jupyter
+```
+
+and create a kernel for that environment:
+
+```
+python -m ipykernel install --user --name=stats_for_cs
+```
+
+And later choose the `stats_for_cs` kernel in Jupyter notebooks.

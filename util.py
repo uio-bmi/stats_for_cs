@@ -1,9 +1,15 @@
-import operator
-from collections import OrderedDict
+import random
 
 import matplotlib.pyplot as plt
 import numpy as np
+import plotly.express as px
 
+
+def coin2():
+    return random.sample(['head', 'head', 'tail'], 1)[0]
+
+def coin1():
+    return random.sample(['head', 'tail'], 1)[0]
 
 def count_outcomes(outcomes):
     outcome_summary = {}
@@ -31,8 +37,6 @@ def plot_outcomes(outcomes, normalize: bool = False):
 
 
 def plot_event_probabilities(event_probabilities: dict):
-    import plotly.express as px
-
     fig = px.bar(x=list(event_probabilities.keys()), y=list(event_probabilities.values()))
     fig.update_layout(yaxis_title='estimated<br>probability', xaxis={'title': 'event'}, template='plotly_white',
                       showlegend=False)
