@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go
 
 
 def coin2():
@@ -10,6 +11,43 @@ def coin2():
 
 def coin1():
     return random.sample(['head', 'tail'], 1)[0]
+
+
+def plot_binomial_distribution_example():
+    import plotly.graph_objects as go
+    from scipy.stats import binom
+
+    # Parameters
+    n = 3  # number of trials
+    p = 0.5  # fair coin
+
+    # Possible outcomes
+    x = [0, 1, 2, 3]
+
+    # Compute probabilities using SciPy's binomial PMF
+    probs = binom.pmf(x, n, p)
+
+    # Create bar plot
+    fig = go.Figure()
+
+    fig.add_trace(go.Bar(
+        x=x,
+        y=probs,
+        width=0.5
+    ))
+
+    # Layout formatting
+    fig.update_layout(
+        title="Probability of Getting 0–3 Heads in 3 Fair Coin Tosses",
+        xaxis_title="Number of Heads",
+        yaxis_title="Probability",
+        yaxis=dict(range=[0, max(probs) * 1.2]),
+        template='plotly_white',
+        width=600,
+        height=400
+    )
+
+    fig.show()
 
 
 def plot_bernoulli_examples():
@@ -74,10 +112,36 @@ def plot_outcomes(outcomes, normalize: bool = False):
     ax.set_xticks(x_values)
 
 
+def plot_uniform_die():
+    # Possible outcomes
+    x = np.arange(1, 7)
+
+    # Uniform probability for each side
+    probs = np.full(6, 1/6)
+
+    fig = go.Figure(go.Bar(
+        x=x,
+        y=probs,
+        width=0.6
+    ))
+
+    fig.update_layout(
+        title="Uniform Distribution – Roll of a Fair Die",
+        xaxis_title="Outcome",
+        yaxis_title="Probability",
+        yaxis=dict(range=[0, max(probs)*1.2]),
+        width=600,
+        height=400,
+        template='plotly_white'
+    )
+
+    fig.show()
+
+
 def plot_event_probabilities(event_probabilities: dict):
     fig = px.bar(x=list(event_probabilities.keys()), y=list(event_probabilities.values()))
     fig.update_layout(yaxis_title='estimated<br>probability', xaxis={'title': 'event'}, template='plotly_white',
-                      showlegend=False)
+                      showlegend=False, width=600, height=400)
     fig.show()
 
 
