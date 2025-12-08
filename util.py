@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 
 
 def coin2():
-    return random.sample(['head', 'head', 'tail'], 1)[0]
+    return random.sample(['head', 'head', 'head', 'head', 'tail'], 1)[0]
 
 def coin1():
     return random.sample(['head', 'tail'], 1)[0]
@@ -138,9 +138,9 @@ def plot_uniform_die():
     fig.show()
 
 
-def plot_event_probabilities(event_probabilities: dict):
+def plot_event_probabilities(event_probabilities: dict, y_title='estimated<br>probability'):
     fig = px.bar(x=list(event_probabilities.keys()), y=list(event_probabilities.values()))
-    fig.update_layout(yaxis_title='estimated<br>probability', xaxis={'title': 'event'}, template='plotly_white',
+    fig.update_layout(yaxis_title=y_title, xaxis={'title': 'event'}, template='plotly_white',
                       showlegend=False, width=600, height=400)
     fig.show()
 
@@ -148,12 +148,42 @@ def plot_event_probabilities(event_probabilities: dict):
 def plot_probability_comparison(event_probabilities_simulation, event_probabilities_formula):
     import plotly.graph_objects as go
 
+    # Extract data
+    x_formula = list(event_probabilities_formula.keys())
+    y_formula = list(event_probabilities_formula.values())
+
+    x_sim = list(event_probabilities_simulation.keys())
+    y_sim = list(event_probabilities_simulation.values())
+
     fig = go.Figure(data=[
-        go.Bar(name='formula', x=list(event_probabilities_formula.keys()),
-               y=list(event_probabilities_formula.values())),
-        go.Bar(name='simulation', x=list(event_probabilities_simulation.keys()),
-               y=list(event_probabilities_simulation.values()))])
-    fig.update_layout(barmode='group', yaxis_title='(estimated)<br>probability', xaxis={'title': 'event'},
-                      template='plotly_white', showlegend=True)
+        go.Bar(
+            name='formula',
+            x=x_formula,
+            y=y_formula,
+            text=[f"{v:.2f}" for v in y_formula],  # numbers on top
+            textposition='outside'                   # above the bar
+        ),
+        go.Bar(
+            name='simulation',
+            x=x_sim,
+            y=y_sim,
+            text=[f"{v:.2f}" for v in y_sim],      # numbers on top
+            textposition='outside'                   # above the bar
+        )
+    ])
+
+    max_y = max(max(y_formula), max(y_sim))
+
+    fig.update_layout(
+        barmode='group',
+        yaxis_title='(estimated)<br>probability',
+        xaxis={'title': 'event'},
+        template='plotly_white',
+        showlegend=True,
+        width=700,
+        height=400,
+        yaxis=dict(range=[0, max_y * 1.15])
+    )
 
     fig.show()
+
