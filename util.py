@@ -2,8 +2,6 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-import plotly.express as px
-import plotly.graph_objects as go
 
 
 def coin2():
@@ -14,7 +12,6 @@ def coin1():
 
 
 def plot_binomial_distribution_example():
-    import plotly.graph_objects as go
     from scipy.stats import binom
 
     # Parameters
@@ -28,31 +25,21 @@ def plot_binomial_distribution_example():
     probs = binom.pmf(x, n, p)
 
     # Create bar plot
-    fig = go.Figure()
+    fig, ax = plt.subplots(figsize=(6, 4))
 
-    fig.add_trace(go.Bar(
-        x=x,
-        y=probs,
-        width=0.5
-    ))
+    ax.bar(x, probs, width=0.5)
 
-    # Layout formatting
-    fig.update_layout(
-        title="Probability of Getting 0–3 Heads in 3 Fair Coin Tosses",
-        xaxis_title="Number of Heads",
-        yaxis_title="Probability",
-        yaxis=dict(range=[0, max(probs) * 1.2]),
-        template='plotly_white',
-        width=600,
-        height=400
-    )
+    ax.set_title("Probability of Getting 0–3 Heads in 3 Fair Coin Tosses")
+    ax.set_xlabel("Number of Heads")
+    ax.set_ylabel("Probability")
+    ax.set_ylim(0, max(probs) * 1.2)
+    ax.set_xticks(x)
 
-    fig.show()
+    plt.tight_layout()
+    plt.show()
 
 
 def plot_bernoulli_examples():
-    import plotly.graph_objects as go
-    from plotly.subplots import make_subplots
     from scipy.stats import bernoulli
 
     # Define outcomes
@@ -62,30 +49,21 @@ def plot_bernoulli_examples():
     p_values = [0.2, 0.5, 0.8]
 
     # Create subplots: 1 row, 3 columns
-    fig = make_subplots(rows=1, cols=3, subplot_titles=[f"p = {p}" for p in p_values])
+    fig, axes = plt.subplots(1, 3, figsize=(9, 4))
+    fig.suptitle("Bernoulli Distribution for Different p Values")
 
-    for i, p in enumerate(p_values, start=1):
+    for i, p in enumerate(p_values):
         probs = bernoulli.pmf(x, p)
-        fig.add_trace(
-            go.Bar(x=x, y=probs, width=0.4),
-            row=1, col=i
-        )
-        # Customize x-axis labels for each subplot
-        fig.update_xaxes(
-            tickmode='array', tickvals=x, ticktext=['0 (Failure)', '1 (Success)'], row=1, col=i
-        )
-        fig.update_yaxes(range=[0, 1], row=1, col=i)  # same y-axis scale for comparison
+        axes[i].bar(x, probs, width=0.4)
+        axes[i].set_title(f"p = {p}")
+        axes[i].set_xticks(x)
+        axes[i].set_xticklabels(['0 (Failure)', '1 (Success)'])
+        axes[i].set_ylim(0, 1)
+        axes[i].set_ylabel("Probability" if i == 0 else "")
 
-    # Update overall layout
-    fig.update_layout(
-        title_text="Bernoulli Distribution for Different p Values",
-        showlegend=False,
-        width=900,  # total figure width
-        height=400,
-        template='plotly_white'
-    )
+    plt.tight_layout()
+    plt.show()
 
-    fig.show()
 
 def count_outcomes(outcomes):
     outcome_summary = {}
@@ -119,35 +97,35 @@ def plot_uniform_die():
     # Uniform probability for each side
     probs = np.full(6, 1/6)
 
-    fig = go.Figure(go.Bar(
-        x=x,
-        y=probs,
-        width=0.6
-    ))
+    fig, ax = plt.subplots(figsize=(6, 4))
 
-    fig.update_layout(
-        title="Uniform Distribution – Roll of a Fair Die",
-        xaxis_title="Outcome",
-        yaxis_title="Probability",
-        yaxis=dict(range=[0, max(probs)*1.2]),
-        width=600,
-        height=400,
-        template='plotly_white'
-    )
+    ax.bar(x, probs, width=0.6)
 
-    fig.show()
+    ax.set_title("Uniform Distribution – Roll of a Fair Die")
+    ax.set_xlabel("Outcome")
+    ax.set_ylabel("Probability")
+    ax.set_ylim(0, max(probs) * 1.2)
+    ax.set_xticks(x)
+
+    plt.tight_layout()
+    plt.show()
 
 
-def plot_event_probabilities(event_probabilities: dict, y_title='estimated<br>probability'):
-    fig = px.bar(x=list(event_probabilities.keys()), y=list(event_probabilities.values()))
-    fig.update_layout(yaxis_title=y_title, xaxis={'title': 'event'}, template='plotly_white',
-                      showlegend=False, width=600, height=400)
-    fig.show()
+def plot_event_probabilities(event_probabilities: dict, y_title='estimated\nprobability'):
+    fig, ax = plt.subplots(figsize=(6, 4))
+
+    x_values = list(event_probabilities.keys())
+    y_values = list(event_probabilities.values())
+
+    ax.bar(x_values, y_values)
+    ax.set_ylabel(y_title)
+    ax.set_xlabel('event')
+
+    plt.tight_layout()
+    plt.show()
 
 
 def plot_probability_comparison(event_probabilities_simulation, event_probabilities_formula):
-    import plotly.graph_objects as go
-
     # Extract data
     x_formula = list(event_probabilities_formula.keys())
     y_formula = list(event_probabilities_formula.values())
@@ -155,35 +133,31 @@ def plot_probability_comparison(event_probabilities_simulation, event_probabilit
     x_sim = list(event_probabilities_simulation.keys())
     y_sim = list(event_probabilities_simulation.values())
 
-    fig = go.Figure(data=[
-        go.Bar(
-            name='formula',
-            x=x_formula,
-            y=y_formula,
-            text=[f"{v:.2f}" for v in y_formula],  # numbers on top
-            textposition='outside'                   # above the bar
-        ),
-        go.Bar(
-            name='simulation',
-            x=x_sim,
-            y=y_sim,
-            text=[f"{v:.2f}" for v in y_sim],      # numbers on top
-            textposition='outside'                   # above the bar
-        )
-    ])
+    fig, ax = plt.subplots(figsize=(7, 4))
+
+    x_positions = np.arange(len(x_formula))
+    bar_width = 0.35
+
+    bars1 = ax.bar(x_positions - bar_width/2, y_formula, bar_width, label='formula')
+    bars2 = ax.bar(x_positions + bar_width/2, y_sim, bar_width, label='simulation')
+
+    # Add text labels on top of bars
+    for bar, val in zip(bars1, y_formula):
+        ax.annotate(f'{val:.2f}', xy=(bar.get_x() + bar.get_width()/2, bar.get_height()),
+                    ha='center', va='bottom', fontsize=9)
+
+    for bar, val in zip(bars2, y_sim):
+        ax.annotate(f'{val:.2f}', xy=(bar.get_x() + bar.get_width()/2, bar.get_height()),
+                    ha='center', va='bottom', fontsize=9)
 
     max_y = max(max(y_formula), max(y_sim))
+    ax.set_ylim(0, max_y * 1.15)
 
-    fig.update_layout(
-        barmode='group',
-        yaxis_title='(estimated)<br>probability',
-        xaxis={'title': 'event'},
-        template='plotly_white',
-        showlegend=True,
-        width=700,
-        height=400,
-        yaxis=dict(range=[0, max_y * 1.15])
-    )
+    ax.set_ylabel('(estimated)\nprobability')
+    ax.set_xlabel('event')
+    ax.set_xticks(x_positions)
+    ax.set_xticklabels(x_formula)
+    ax.legend()
 
-    fig.show()
-
+    plt.tight_layout()
+    plt.show()
