@@ -163,6 +163,24 @@ def plot_probability_comparison(event_probabilities_simulation, event_probabilit
     plt.show()
 
 
+def plot_many_values_with_mean(samples, title=""):
+    """Plot probability distribution with mean indicated"""
+    fig, ax = plt.subplots(figsize=(6, 4))
+
+    ax.hist(samples, bins=30, density=False, alpha=0.7, color='blue', edgecolor='black')
+
+    mean_value = np.mean(samples)
+    ax.axvline(mean_value, color='red', linestyle='dashed', linewidth=2, label=f'Mean: {mean_value:.2f}')
+    ax.legend()
+
+    ax.set_title(title)
+    ax.set_xlabel('Value')
+    ax.set_ylabel('Density')
+
+    plt.tight_layout()
+    plt.show()
+
+
 # === Norske funksjoner / Norwegian functions ===
 
 def mynt1():
